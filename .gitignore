@@ -1,0 +1,18 @@
+.DS_store
+.npmrc
+usersToBeDeleted.json
+globalSetupTTL.json
+/src/utils/runningArgs.json
+
+# Node
+node_modules/
+
+# Report folder/files
+/playwright-report/
+
+# Page state files saved in global-setup for current session
+/*state.json
+/browser-states/
+
+# Local Visual Snapshots
+**/*-snapshots/local/

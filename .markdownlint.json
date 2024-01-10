@@ -1,0 +1,8 @@
+{
+  "line-length": false,
+  "blanks-around-fences": false,
+  "no-duplicate-heading": { "allow_different_nesting": true },
+  "ul-indent": { "indent": 4 },
+  "ul-style": { "style": "dash" },
+  "ol-prefix": { "style": "one" }
+}

@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "commonjs",
+    "lib": ["es6", "dom"],
+    "allowJs": true,
+    "rootDirs": ["./src", "./tests"],
+    "baseUrl": "./src",
+    "moduleResolution": "Node",
+    "sourceMap": true,
+    "removeComments": true,
+    "typeRoots": ["./node_modules/@types", "./src/@types"],
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@abilities/*": ["screenplay/abilities/*"],
+      "@actors/*": ["screenplay/actors/*"],
+      "@activity": ["screenplay/activity.ts"],
+      "@config/*": ["config/*"],
+      "@interactions/*": ["screenplay/interactions/*"],
+      "@mocks/*": ["mocks/*"],
+      "@page-objects/*": ["page-objects/*"],
+      "@questions/*": ["screenplay/questions/*"],
+      "@site-content/*": ["site-content/*"],
+      "@tasks/*": ["screenplay/tasks/*"],
+      "@utils/*": ["utils/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "exclude": ["node_modules"]
+}

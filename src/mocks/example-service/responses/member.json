@@ -1,0 +1,14 @@
+{
+  "GET_MEMBER_200_RESPONSE_01": {
+    "status": 200,
+    "headers": {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": "true"
+    },
+    "body": {
+      "firstName": "mock",
+      "lastName": "user",
+      "emailAddress": "mock-email@brands.com"
+    }
+  }
+}

@@ -1,0 +1,98 @@
+{
+	// Place your nextgen-automated-tests workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders.
+	// Placeholders with the same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+	"initial spec stubb": {
+		"prefix": ["spec >>>"],
+		"body": [
+		"import 'tsconfig-paths/register'",
+		"import { test } from '@playwright/test'",
+		"",
+		"import { BrowseTheWeb } from '@abilities/browse-the-web'",
+		"import { user } from '@config/${1|nagbrands/login-sdk/login-sdk.setup,nagbrands/my-account/my-account.setup,nagbrands/webtests/webtests.setup,one/peru/peru.setup|}'",
+		"import { Navigate } from '@interactions/navigate'",
+		"",
+		"test.beforeEach(async ({ page }) => {",
+		"\tuser.can(BrowseTheWeb.with(page))",
+		"})",
+		"",
+		"test.describe('Authenticated user tests', async () => {",
+		"\ttest.use({ storageState: './browser-states/${2|nag-login-sdk-auth-state,nag-my-account-auth-state,nag-webtests-auth-state,one-peru-auth-state|}.json' })",
+		"",
+		"\ttest.describe('Success flows', async () => {",
+		"\t\ttest('TITLE', async () => {",
+		"\t\t\tawait user.attemptsTo(Navigate.to($0))",
+		"\t\t})",
+		"\t})",
+		"\ttest.describe('Negative flows', async () => {",
+		"\t\ttest('TITLE', async () => {",
+		"\t\t\tawait user.attemptsTo(Navigate.to($0))",
+		"\t\t})",
+		"\t})",
+		"\ttest.describe('Analytics tests', async () => {",
+		"\t\ttest('TITLE', async () => {",
+		"\t\t\tawait user.attemptsTo(Navigate.to($0))",
+		"\t\t})",
+		"\t})",
+		"})",
+		"",
+		"test.describe('Unauthenticated user tests', async () => {",
+		"\ttest.describe('Success flows', async () => {",
+		"\t\ttest('TITLE', async () => {",
+		"\t\t\tawait user.attemptsTo(Navigate.to($0))",
+		"\t\t})",
+		"\t})",
+		"\ttest.describe('Negative flows', async () => {",
+		"\t\ttest('TITLE', async () => {",
+		"\t\t\tawait user.attemptsTo(Navigate.to($0))",
+		"\t\t})",
+		"\t})",
+		"\ttest.describe('Analytics tests', async () => {",
+		"\t\ttest('TITLE', async () => {",
+		"\t\t\tawait user.attemptsTo(Navigate.to($0))",
+		"\t\t})",
+		"\t})",
+		"})",
+		""
+		],
+		"description": "Creates an initial spec file content"
+	},
+	"describe snippet": {
+		"prefix": ["describe >>>", "test.describe >>>"],
+		"body": ["test.describe('$1', async () => {", "\ttest('$2', async () => {", "\t\tawait user.attemptsTo(Navigate.to($0))", "\t})", "})"],
+		"description": "Adds describe section"
+	},
+	"test snippet": {
+		"prefix": ["test >>>"],
+		"body": ["test('$1', async () => {", "\tawait user.attemptsTo(Navigate.to($0))", "})"],
+		"description": "Adds test scenario"
+	},
+	"await user.attemptsTo": {
+		"prefix": ["attemptsTo >>>"],
+		"body": ["await user.attemptsTo($0)"],
+		"description": "Adds screenplay step: User attempts to (action)"
+	},
+	"await user.asks": {
+		"prefix": ["asks >>>"],
+		"body": ["await user.asks($0)"],
+		"description": "Adds screenplay step: User asks to (assertion)"
+	},
+	"mock import snippet": {
+		"prefix": ["mock >>>"],
+		"body": ["import { $0 } from '@mocks$1'"],
+		"description": "Adds mock import sample"
+	}
+}
