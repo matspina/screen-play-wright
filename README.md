@@ -1,14 +1,6 @@
-# Playwright + ScreenPlay pattern Automation Framework
+# Playwright + ScreenPlay pattern automation framework
 
 The suite can run locally on Unix based systems, like Linux or macOS, and Windows.
-
-1. Minimum knowledge needed to create new tests:
-    - Javascript
-    - CSS selectors or [Playwright selectors](https://playwright.dev/docs/selectors) (extension of CSS selectors - **Recommended**)
-1. Average knowledge needed to create new core methods:
-    - Object oriented javascript
-    - Typescript
-    - [Playwright API](https://playwright.dev/docs/api/class-playwright)
 
 ## Table of Contents
 
@@ -50,7 +42,7 @@ There are classes for Actors, Abilities, Interactions, Tasks and Questions, whic
 
 ### Requirements
 
-- [Node.js 16+](https://nodejs.org) (**Recommended: install it with [nvm](https://github.com/nvm-sh/nvm)**)
+- [Node.js 20+](https://nodejs.org) (**Recommended: install it with [nvm](https://github.com/nvm-sh/nvm)**)
 - [Docker](https://www.docker.com) (Required for visual regression testing)
 - [Git LFS](https://git-lfs.github.com)
 - VScode Extensions highly recommended:
