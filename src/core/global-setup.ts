@@ -52,7 +52,7 @@ const saveLoginStates = async (): Promise<void> => {
 	const promisesToWait: Array<Promise<void>> = []
 	let isAnySetupFulfilled: boolean
 
-	for (const siteLoginSteps of firstBatchToRun) promisesToWait.push(siteLoginSteps.performLoginSteps())
+	for (const siteLoginSteps of firstBatchToRun) promisesToWait.push(siteLoginSteps.performSetupSteps())
 
 	while (promisesToWait.length > 0) {
 		await Promise.race(promisesToWait)
@@ -81,7 +81,7 @@ const saveLoginStates = async (): Promise<void> => {
 						if (promiseState === 'fulfilled') isAnySetupFulfilled = true
 					}
 				}
-				if (sitesToSaveLoginStates.length > 0) promisesToWait.push(sitesToSaveLoginStates.shift().performLoginSteps())
+				if (sitesToSaveLoginStates.length > 0) promisesToWait.push(sitesToSaveLoginStates.shift().performSetupSteps())
 				if (promisesToWait.length === 0 && !isAnySetupFulfilled)
 					throw Error('No global setup successed. Please check above for details.')
 			})

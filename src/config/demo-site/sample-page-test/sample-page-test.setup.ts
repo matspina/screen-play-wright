@@ -15,8 +15,8 @@ class NavigateAndSignIn implements Activity<void> {
 	public async performAs(): Promise<void> {
 		await user.attemptsTo(Navigate.to(SamplePageTest.URL).andWaitUntil('networkidle'))
 		//
-		// // Perform further steps to conclude the global setup
-		// await user.attemptsTo(SignIn.onCurrentPage())
+		// // Perform further steps to improve the global setup
+		// E.g.: await user.attemptsTo(SignIn.onCurrentPage())
 	}
 }
 
@@ -26,7 +26,7 @@ export default new SiteGlobalSetup({
 	experienceName: 'DEMO SITE',
 	siteName: 'Sample Page Test',
 	testsPath: '/tests/demo-site/sample-page-test/',
-	storageStateFile: './browser-states/demo-sample-page-auth-state.json',
+	storageStateFile: './browser-states/demo-sample-page-cached-state.json',
 	signInSteps: NavigateAndSignIn.onCurrentPage(),
 	globalSetupTtl: 20
 })

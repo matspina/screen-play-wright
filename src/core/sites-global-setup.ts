@@ -11,7 +11,7 @@ import { Question } from '@questions/question'
 
 import { getEnvAndInstance } from './environment-manager'
 
-export interface GlobalSetupLoginSettings {
+export interface GlobalSetupSettings {
 	user: User
 	experienceName: string
 	siteName: string
@@ -26,7 +26,7 @@ export interface GlobalSetupLoginSettings {
 }
 
 export class SiteGlobalSetup {
-	constructor(args: GlobalSetupLoginSettings) {
+	constructor(args: GlobalSetupSettings) {
 		this.properties = {
 			user: args.user,
 			experienceName: args.experienceName,
@@ -42,7 +42,7 @@ export class SiteGlobalSetup {
 		}
 	}
 
-	public readonly properties: GlobalSetupLoginSettings
+	public readonly properties: GlobalSetupSettings
 
 	private readonly globalSetupTTLFile = {
 		path: './browser-states/ttl/',
@@ -98,7 +98,7 @@ export class SiteGlobalSetup {
 		})
 	}
 
-	public async performLoginSteps(): Promise<void> {
+	public async performSetupSteps(): Promise<void> {
 		const {
 			experienceName,
 			siteName,
@@ -111,10 +111,10 @@ export class SiteGlobalSetup {
 		} = this.properties
 
 		const STATUS_MSG = {
-			starting: () => `   # Saving ${experienceName} > ${siteName} login state...`,
-			retrying: () => `   Retrying ${currentRetry} of ${LOGIN_RETRIES}...`,
-			error: () => `   Error on ${experienceName} > ${siteName} login flow`,
-			success: () => `   ${colors.green('✓')} ${experienceName} > ${siteName} login state saved successfully`,
+			starting: () => `   # Saving ${experienceName} > ${siteName} storage state...`,
+			retrying: () => `   Retrying ${currentRetry} of ${SETUP_RETRIES}...`,
+			error: () => `   Error on ${experienceName} > ${siteName} storage state flow`,
+			success: () => `   ${colors.green('✓')} ${experienceName} > ${siteName} storage state saved successfully`,
 			cached: () =>
 				`   INFO: Using cached global setup state for ${experienceName} > ${siteName}. TTL: ${globalSetupTtl} minutes`,
 			skipped: () =>
@@ -135,7 +135,7 @@ export class SiteGlobalSetup {
 			this.properties.forceHeadlessTo !== undefined
 				? this.properties.forceHeadlessTo
 				: !!process.env.npm_config_headless || process.env.npm_config_headless === undefined
-		const LOGIN_RETRIES = !HEADLESS || process.env.npm_config_debug ? 0 : 2
+		const SETUP_RETRIES = !HEADLESS || process.env.npm_config_debug ? 0 : 2
 		const launchOptions = {
 			headless: HEADLESS
 		}
@@ -168,7 +168,7 @@ export class SiteGlobalSetup {
 				await runSteps()
 				break
 			} catch (err) {
-				if (currentRetry >= LOGIN_RETRIES) {
+				if (currentRetry >= SETUP_RETRIES) {
 					console.log()
 					console.log(colors.red(STATUS_MSG.error()))
 					console.log()
@@ -182,7 +182,7 @@ export class SiteGlobalSetup {
 			} finally {
 				await context.close()
 			}
-		} while (currentRetry <= LOGIN_RETRIES)
+		} while (currentRetry <= SETUP_RETRIES)
 
 		console.log(STATUS_MSG.success())
 	}
