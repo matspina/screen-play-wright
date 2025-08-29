@@ -131,9 +131,7 @@ const main = async (): Promise<void> => {
 		}
 	}
 
-	if (!process.env.CI) {
-		await writeFile(RUNNING_ARGS_FILE, JSON.stringify(runningArgs))
-	}
+	await writeFile(RUNNING_ARGS_FILE, JSON.stringify(runningArgs))
 }
 
 main()
