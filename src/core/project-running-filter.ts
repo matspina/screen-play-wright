@@ -41,7 +41,7 @@ export default class ProjectRunningFilter implements Reporter {
 		let parentSuite = test.parent
 		let hasStorageState = false
 		while (parentSuite) {
-			if (parentSuite._annotations.filter(obj => ['skip', 'fixme'].includes(obj.type)).length > 0) return false
+			if (parentSuite._staticAnnotations.filter(obj => ['skip', 'fixme'].includes(obj.type)).length > 0) return false
 			if (parentSuite._use.filter(obj => obj?.fixtures?.storageState).length > 0) hasStorageState = true
 			parentSuite = parentSuite.parent
 		}

@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright:v1.27.1 AS base
+FROM mcr.microsoft.com/playwright:v1.55.0 AS base
 
 FROM base AS image-local
 COPY . /screen-play-wright

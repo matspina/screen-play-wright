@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import { PlaywrightTestConfig, devices } from '@playwright/test'
+import { devices } from '@playwright/test'
 import { existsSync, readFileSync } from 'fs'
 
 import { RUNNING_ARGS_FILE } from '../core/environment-manager'
@@ -24,7 +24,7 @@ const playwrightTestConfig = {
 	reportSlowTests: { max: 5, threshold: 150000 },
 	updateSnapshots: process.env.CI ? 'none' : process.env.npm_config_update_snapshots || runningArgs?.updateSnapshots ? 'all' : 'missing',
 	// Timeout for a single test to run (ms):
-	timeout: 240000, // 4 minutes
+	timeout: 120000, // 2 minutes
 	// Timeout for each expect call to be resolved (ms):
 	expect: { timeout: 5000 },
 	use: {
@@ -64,9 +64,9 @@ const playwrightTestConfig = {
 	],
 	reporter: [
 		['list'],
-		['../core/html-reporter', { open: 'never', outputFolder: '../../playwright-report/report' }],
+		['html', { open: 'never', outputFolder: '../../playwright-report/report' }],
 		['../core/project-running-filter']
 	]
 }
 
-export default playwrightTestConfig as PlaywrightTestConfig
+export default playwrightTestConfig
