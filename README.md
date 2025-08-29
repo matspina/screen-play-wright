@@ -1,7 +1,5 @@
 # Playwright + ScreenPlay pattern automation framework
 
-The suite can run locally on Unix based systems, like Linux or macOS, and Windows.
-
 ## Table of Contents
 
 1. [Screenplay Design Pattern](#screenplay-design-pattern)
@@ -28,7 +26,7 @@ The suite can run locally on Unix based systems, like Linux or macOS, and Window
 ## Screenplay Design Pattern
 
 This project follows the screenplay design pattern, which is a concept to organize and write more readable and maintainable tests.
-More info about the pattern [here](https://www.infoq.com/articles/Beyond-Page-Objects-Test-Automation-Serenity-Screenplay/).
+More info about the pattern [in this article](https://www.infoq.com/articles/Beyond-Page-Objects-Test-Automation-Serenity-Screenplay/).
 
 There are classes for Actors, Abilities, Interactions, Tasks and Questions, which are instantiated statically.
 
@@ -78,7 +76,7 @@ npm run docker:build
 
 Git Large File Storage (LFS) replaces large files such as audio samples, videos, datasets, and graphics with text pointers inside Git, while storing the file contents on a remote server like GitHub.com or GitHub Enterprise.
 
-This is required for this project. It is useful for versioning image files (like the ones we use to keep the snapshot baselines, for visual regression), so the repository doesn't keep bynary files inside it, avoiding taking up more space than it really needs.
+This is required for this project once it's essential for versioning image files (like the ones we use to keep the snapshot baselines, for visual regression), so the repository doesn't keep bynary files inside it, avoiding taking up more space than it really needs.
 
 1. [Download](https://git-lfs.github.com/) and install it.
 1. Then, run `git lfs install` once to set up Git LFS for your user account and it's done! No configuration is needed. The file /.gitattributes is already set to take care of it.
@@ -130,10 +128,10 @@ npm test --env=uat
 ```
 (when passing the environment in command line, the menu is not skipped)
 
-Or, to run all tests within a single experience (e.g.: nagbrands), execute:
+Or, to run all tests within a single project (e.g.: proj1), execute:
 
 ```shell
-npm test nagbrands
+npm test proj1
 ```
 
 Valid arguments for running the tests:
@@ -161,27 +159,27 @@ Valid arguments for running the tests:
 You can also pass a path (or part of it, as a regex) to run a specific folder or test if you want, like below:
 
 ```shell
-npm test tests/nagbrands/functionalities
+npm test tests/proj1/e2e
 ```
 
 Or simply:
 
 ```shell
-npm test widget-container
+npm test e2e
 ```
 
 Or using regex:
 
 ```shell
-npm test nagbrands/.*/components
+npm test proj1/.*/components
 ```
 
 Multiple paths/regex are also valid, for example:
 
 ```shell
-npm test widget-container card text-with-image
+npm test e2e components
 ```
-(Will run tests of paths containing the words "widget-container", "card" and "text-with-image")
+(Will run tests of paths containing the words "e2e" and "components")
 
 #### Running with Docker
 
@@ -193,10 +191,10 @@ Make sure you have already built the Docker image once with:
 npm run docker:build
 ```
 
-Then start and enter the container with:
+To run the tests inside the docker container, run:
 
 ```shell
-npm run docker:run
+npm run test:docker
 ```
 
 Once you are inside the container, you can run the tests with the same commands as described above, such as `npm test` or including any parameter as needed.
