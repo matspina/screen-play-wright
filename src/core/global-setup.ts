@@ -43,8 +43,9 @@ const saveLoginStates = async (): Promise<void> => {
 
 	for (const siteSetup of sitesSetup) {
 		const { experienceName, siteName } = siteSetup.default.properties
-		if (process.env[`PW_SITE_HAS_GLOBAL_SETUP_${experienceName}_${siteName}`])
+		if (process.env[`PW_SITE_HAS_GLOBAL_SETUP_${experienceName}_${siteName}`]) {
 			sitesToSaveLoginStates.push(siteSetup.default)
+		}
 	}
 
 	const firstBatchToRun = sitesToSaveLoginStates.splice(0, MAX_PARALLEL_SETUPS)

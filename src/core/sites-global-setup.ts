@@ -99,15 +99,24 @@ export class SiteGlobalSetup {
 	}
 
 	public async performLoginSteps(): Promise<void> {
-		const { experienceName, siteName, user, signInSteps, signInAssertion, storageStateFile, browserName } =
-			this.properties
+		const {
+			experienceName,
+			siteName,
+			user,
+			signInSteps,
+			signInAssertion,
+			storageStateFile,
+			browserName,
+			globalSetupTtl
+		} = this.properties
 
 		const STATUS_MSG = {
 			starting: () => `   # Saving ${experienceName} > ${siteName} login state...`,
 			retrying: () => `   Retrying ${currentRetry} of ${LOGIN_RETRIES}...`,
 			error: () => `   Error on ${experienceName} > ${siteName} login flow`,
 			success: () => `   ${colors.green('✓')} ${experienceName} > ${siteName} login state saved successfully`,
-			cached: () => `   INFO: Using cached global setup state for ${experienceName} > ${siteName}`,
+			cached: () =>
+				`   INFO: Using cached global setup state for ${experienceName} > ${siteName}. TTL: ${globalSetupTtl} minutes`,
 			skipped: () =>
 				`   WARN: Global setup '${siteName}' SKIPPED due to condition: skipOnJenkins === true OR forceHeadlessTo === false`
 		}

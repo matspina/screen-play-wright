@@ -4,8 +4,20 @@ const environmentsMap: EnvironmentsMap = {
 	experienceName: 'DEMO SITE',
 	experiencePath: '/tests/demo-site/',
 	baseEnvironmentData: {
-		dev: {},
-		qa: {},
+		dev: {
+			1: {
+				demoSite: {
+					url: 'https://www.globalsqa.com/'
+				}
+			}
+		},
+		qa: {
+			1: {
+				demoSite: {
+					url: 'https://www.globalsqa.com/'
+				}
+			}
+		},
 		uat: {
 			1: {
 				demoSite: {
