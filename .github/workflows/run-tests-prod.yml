@@ -1,0 +1,31 @@
+name: Run tests on PROD
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Run every Monday at 12:00 PM
+    - cron:  '0 12 * * 1'
+
+jobs:
+  run_tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+
+      - name: Install packages and build docker image
+        run: |
+          npm install
+          npm run docker:build
+
+      - name: Run tests
+        run: npm run test:docker --env=prod --retries=2 --workers=2
+
+      - name: Save report
+        uses: actions/upload-artifact@v4.3.0
+        if: always()
+        with:
+          name: "HTML Report"
+          path: |
+            ${{ github.workspace }}/playwright-report/report
