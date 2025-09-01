@@ -1,36 +1,37 @@
-/* eslint-disable prettier/prettier */
-
-import { devices } from '@playwright/test'
+import { PlaywrightTestConfig, devices, defineConfig } from '@playwright/test'
 import { existsSync, readFileSync } from 'fs'
 
-import { RUNNING_ARGS_FILE } from '../core/environment-manager'
+import { RUNNING_ARGS_FILE, RunningArgs } from '../core/environment-manager.js'
+import { TIMEOUTS } from './default-constants.js'
 
-let runningArgs = null
+let runningArgs: RunningArgs = {}
 
 if (existsSync(RUNNING_ARGS_FILE)) {
 	runningArgs = JSON.parse(readFileSync(RUNNING_ARGS_FILE, { encoding: 'utf-8' }))
 }
 
-const playwrightTestConfig = {
+const playwrightTestConfig = defineConfig({
 	// Test suite options
-	testDir: '../../tests',
-	globalSetup: '../core/global-setup.ts',
-	globalTeardown: '../core/global-teardown.ts',
-	retries: Number(process.env.npm_config_retries) || runningArgs?.retries,
+	testDir: '../../',
+	retries: Number(process.env.npm_config_retries) || runningArgs?.retries || 0,
 	workers: Number(process.env.npm_config_workers) || runningArgs?.workers || 1,
 	fullyParallel: true,
 	outputDir: '../../playwright-report/assets',
 	forbidOnly: !!process.env.CI,
 	reportSlowTests: { max: 5, threshold: 150000 },
-	updateSnapshots: process.env.CI ? 'none' : process.env.npm_config_update_snapshots || runningArgs?.updateSnapshots ? 'all' : 'missing',
+	updateSnapshots: process.env.CI
+		? 'none'
+		: process.env.npm_config_update_snapshots || runningArgs?.updateSnapshots
+			? 'all'
+			: 'missing',
 	// Timeout for a single test to run (ms):
-	timeout: 120000, // 2 minutes
+	timeout: 90000, // 90 seconds
 	// Timeout for each expect call to be resolved (ms):
-	expect: { timeout: 5000 },
+	expect: { timeout: TIMEOUTS.EXPECT },
 	use: {
 		// Timeouts (ms)
-		navigationTimeout: 30000,
-		actionTimeout: 15000,
+		navigationTimeout: TIMEOUTS.NAVIGATION,
+		actionTimeout: TIMEOUTS.ACTION,
 
 		// Browser options
 		headless: !!process.env.npm_config_headless || !!process.env.IS_DOCKER,
@@ -40,7 +41,17 @@ const playwrightTestConfig = {
 	},
 	projects: [
 		{
+			name: 'Global Setup',
+			testMatch: /\/src\/config\/global-setup\.ts$/,
+			teardown: 'Global Teardown'
+		},
+		{
+			name: 'Global Teardown',
+			testMatch: /\/src\/config\/global-teardown\.ts$/
+		},
+		{
 			name: 'mobile',
+			dependencies: ['Global Setup'],
 			testIgnore:
 				process.env.npm_config_profile?.toLowerCase() === 'desktop' || runningArgs?.profile?.toLowerCase() === 'desktop'
 					? /.*/
@@ -52,6 +63,7 @@ const playwrightTestConfig = {
 		},
 		{
 			name: 'desktop',
+			dependencies: ['Global Setup'],
 			testIgnore:
 				process.env.npm_config_profile?.toLowerCase() === 'mobile' || runningArgs?.profile?.toLowerCase() === 'mobile'
 					? /.*/
@@ -67,6 +79,6 @@ const playwrightTestConfig = {
 		['html', { open: 'never', outputFolder: '../../playwright-report/report' }],
 		['../core/project-running-filter']
 	]
-}
+})
 
-export default playwrightTestConfig
+export default playwrightTestConfig as PlaywrightTestConfig

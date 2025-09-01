@@ -1,4 +1,5 @@
-import { Activity } from '@activity'
+import { Interaction } from '@interaction'
+
 import { User } from '@actors/user'
 
 /**
@@ -7,7 +8,7 @@ import { User } from '@actors/user'
  * E.g.: MouseWheelRoll.to(0, 200)
  * @method `.to()` Static initializer. Receives a position to roll, where X = horizontally and Y = vertically.
  */
-export class MouseWheelRoll implements Activity<void> {
+export class MouseWheelRoll implements Interaction<void> {
 	private deltaX: number
 
 	private deltaY: number

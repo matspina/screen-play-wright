@@ -1,4 +1,5 @@
-import { Activity } from '@activity'
+import { Interaction } from '@interaction'
+
 import { User } from '@actors/user'
 
 /**
@@ -8,7 +9,7 @@ import { User } from '@actors/user'
  * @method `.with()` Receives the text to fill in the given element.
  * Note that you can pass an empty string to clear the input field.
  */
-export class Fill implements Activity<void> {
+export class Fill implements Interaction<void> {
 	private selector: string
 
 	private text: string

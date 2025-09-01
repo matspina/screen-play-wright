@@ -1,4 +1,4 @@
-import { getSessionSitesList } from '@config/demo-site/environments-map'
+import { getSessionSitesList } from '@config/environments-map'
 
 export class SamplePageTest {
 	public static get URL(): string {

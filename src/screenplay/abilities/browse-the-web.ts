@@ -35,7 +35,8 @@ export class BrowseTheWeb {
 		// Below are some URL patterns that should be ignored (usually analytics) that can mess up the network.
 		const GLOBAL_PATTERNS_IGNORED = [
 			/^https?:\/\/([-\w.]*\.)?google-analytics.com\/g\/collect/,
-			/^https?:\/\/([-\w.]*\.)?tr\.snapchat\.com/
+			/^https?:\/\/([-\w.]*\.)?tr\.snapchat\.com/,
+			/^https?:\/\/([-\w.]*\.)?mobtrakk\.com\/match/
 		]
 
 		const shouldIgnore = (url: string) => {

@@ -18,7 +18,6 @@
 	"initial spec stubb": {
 		"prefix": ["spec >>>"],
 		"body": [
-		"import 'tsconfig-paths/register'",
 		"import { test } from '@playwright/test'",
 		"",
 		"import { BrowseTheWeb } from '@abilities/browse-the-web'",

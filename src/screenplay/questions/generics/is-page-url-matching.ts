@@ -1,9 +1,8 @@
 import { expect } from '@playwright/test'
+import { Question } from '@question'
 
 import { User } from '@actors/user'
 import { removeHttpCredential } from '@utils/remove-http-credential'
-
-import { Question } from '@questions/question'
 
 /**
  * Asserts if the current page URL matches the one provided.

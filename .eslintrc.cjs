@@ -11,28 +11,32 @@ module.exports = {
 	},
 	plugins: ['@typescript-eslint', 'prettier', 'import-helpers'],
 	rules: {
-		'no-param-reassign': 0,
+		'@typescript-eslint/no-unused-vars': [
+			'error',
+			{
+				args: 'all',
+				argsIgnorePattern: '^_',
+				caughtErrors: 'all',
+				caughtErrorsIgnorePattern: '^_',
+				destructuredArrayIgnorePattern: '^_',
+				varsIgnorePattern: '^_'
+			}
+		],
 		'no-underscore-dangle': 0,
 		'max-classes-per-file': ['error', { ignoreExpressions: true }],
 		'no-loop-func': 0,
-		'import/no-dynamic-require': 0,
-		'global-require': 0,
 		'no-empty-pattern': 0,
 		'no-plusplus': 0,
 		'no-nested-ternary': 0,
 		'no-await-in-loop': 0,
 		'class-methods-use-this': 0,
 		'consistent-return': 0,
-		'dot-notation': 0,
 		'prettier/prettier': 'error',
 		'comma-dangle': ['error', 'never'],
 		indent: ['error', 'tab', { SwitchCase: 1 }],
 		quotes: ['error', 'single', { avoidEscape: true }],
 		semi: ['error', 'never'],
-		'new-cap': ['error', { newIsCap: false }],
 		'no-console': 0,
-		'no-undef': 0,
-		'no-tabs': 0,
 		'no-use-before-define': 0,
 		'no-restricted-syntax': ['error', 'LabeledStatement', 'WithStatement'],
 		'max-len': ['error', { code: 180 }],
@@ -45,7 +49,7 @@ module.exports = {
 				newlinesBetween: 'always',
 				groups: [
 					['module', '/^@playwright/'],
-					['/^@abilities/', '/^@activity/', '/^@actors/', '/^@config/', '/^@utils/'],
+					['/^@abilities/', '/^@actors/', '/^@config/', '/^@utils/'],
 					['/^@mocks/', '/^@page-objects/'],
 					['/^@interactions/', '/^@questions/', '/^@tasks/'],
 					['parent', 'sibling', 'index']

@@ -1,4 +1,5 @@
-import { Activity } from '@activity'
+import { Interaction } from '@interaction'
+
 import { User } from '@actors/user'
 
 import { FacebookSignIn, AvailableFacebookAccountNames } from '@page-objects/generics/facebook/sign-in-page'
@@ -9,7 +10,7 @@ import { Type } from '@interactions/type'
 import { WaitFor } from '@interactions/wait-for'
 import { IsPageUrl } from '@questions/generics/is-page-url-matching'
 
-export class SignInAt implements Activity<void> {
+export class SignInAt implements Interaction<void> {
 	private accountToUse: AvailableFacebookAccountNames
 
 	public static facebookAccount(accountToUse: AvailableFacebookAccountNames): SignInAt {

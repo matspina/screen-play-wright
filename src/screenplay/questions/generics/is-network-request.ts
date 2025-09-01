@@ -1,8 +1,7 @@
 import { expect, Page } from '@playwright/test'
+import { Question } from '@question'
 
 import { User } from '@actors/user'
-
-import { Question } from '@questions/question'
 
 /**
  * Observer to get network requests and assert their existence.

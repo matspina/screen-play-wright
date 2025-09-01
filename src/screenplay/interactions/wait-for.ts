@@ -1,6 +1,6 @@
+import { Interaction } from '@interaction'
 import { ElementHandle } from '@playwright/test'
 
-import { Activity } from '@activity'
 import { User } from '@actors/user'
 import playwrightTestConfig from '@config/playwright.config'
 
@@ -34,7 +34,7 @@ export class WaitFor {
 	 * E.g.: WaitFor.timeout(1500)
 	 */
 	public static timeout(timeout: number) {
-		return new (class Timeout implements Activity<void> {
+		return new (class Timeout implements Interaction<void> {
 			public async performAs({
 				abilities: {
 					browseTheWeb: { page }
@@ -54,7 +54,7 @@ export class WaitFor {
 	 * E.g: WaitFor.selector('div.selector').toBe('hidden')
 	 */
 	public static selector(selector: string) {
-		return new (class Selector extends WaitFor implements Activity<ElementHandle> {
+		return new (class Selector extends WaitFor implements Interaction<ElementHandle> {
 			private visibilityState: VisibilityState
 
 			private text = ''
@@ -96,7 +96,7 @@ export class WaitFor {
 	 * E.g: WaitFor.networkIdle().ignoring(/\.svg/) OR WaitFor.networkIdle().ignoring([/\.svg/, /\.png/])
 	 */
 	public static networkIdle(minConnections = 0) {
-		return new (class NetworkIdle extends WaitFor implements Activity<void> {
+		return new (class NetworkIdle extends WaitFor implements Interaction<void> {
 			private requestsToIgnore: Array<RegExp> = []
 
 			public upTo(miliseconds: number): NetworkIdle {

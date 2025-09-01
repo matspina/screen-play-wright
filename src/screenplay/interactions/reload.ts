@@ -1,6 +1,6 @@
+import { Interaction } from '@interaction'
 import { Response } from '@playwright/test'
 
-import { Activity } from '@activity'
 import { User } from '@actors/user'
 
 type WaitUntil = 'domcontentloaded' | 'networkidle' | 'load' | 'commit'
@@ -12,7 +12,7 @@ type WaitUntil = 'domcontentloaded' | 'networkidle' | 'load' | 'commit'
  * @method `.andWaitUntil()` [optional] Specifies how the navigation will wait to complete the step.
  * Available options: 'domcontentloaded' | 'networkidle' | 'load' | 'commit'. Defaults to 'load'.
  */
-export class Reload implements Activity<Response> {
+export class Reload implements Interaction<Response> {
 	private waitUntil: WaitUntil = 'load'
 
 	private queryParameter: string

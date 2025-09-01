@@ -3,46 +3,42 @@ import colors from 'colors'
 import { access, readFile, writeFile, mkdir } from 'fs/promises'
 import { lock } from 'proper-lockfile'
 
-import { BrowseTheWeb } from '@abilities/browse-the-web'
-import { Activity } from '@activity'
-import { User } from '@actors/user'
+import { Interaction } from '../@types/interaction.js'
+import { Question } from '../@types/question.js'
+import { BrowseTheWeb } from '../screenplay/abilities/browse-the-web.js'
+import { User } from '../screenplay/actors/user.js'
+import { getEnvAndInstance } from './environment-manager.js'
 
-import { Question } from '@questions/question'
-
-import { getEnvAndInstance } from './environment-manager'
-
-export interface GlobalSetupSettings {
+export interface GlobalSetupLoginSettings {
 	user: User
-	experienceName: string
-	siteName: string
+	setupName: string
 	testsPath: string
-	storageStateFile: string
-	signInSteps: Activity<unknown>
-	signInAssertion?: Question<unknown>
+	actionSteps: Interaction<unknown>
+	assertionSteps?: Question<unknown>
+	storageStateFile?: string
 	browserName?: 'chromium' | 'webkit'
 	skipOnJenkins?: boolean // Select to skip the global setup on Jenkins
 	forceHeadlessTo?: boolean // By default, headless is true, but it can be forced to false if needed by some setup file
-	globalSetupTtl?: number // Time in minutes to cache the global setup state (default is 0 - No cache)
+	cacheGlobalSetupFor?: { minutes: number } // Time to cache the global setup state (default is 0 - No cache)
 }
 
 export class SiteGlobalSetup {
-	constructor(args: GlobalSetupSettings) {
+	constructor(args: GlobalSetupLoginSettings) {
 		this.properties = {
 			user: args.user,
-			experienceName: args.experienceName,
-			siteName: args.siteName,
+			setupName: args.setupName,
 			testsPath: args.testsPath,
 			storageStateFile: args.storageStateFile,
-			signInSteps: args.signInSteps,
-			signInAssertion: args.signInAssertion,
+			actionSteps: args.actionSteps,
+			assertionSteps: args.assertionSteps,
 			browserName: args.browserName || 'chromium',
 			skipOnJenkins: args.skipOnJenkins,
 			forceHeadlessTo: args.forceHeadlessTo,
-			globalSetupTtl: args.globalSetupTtl || 0
+			cacheGlobalSetupFor: args.cacheGlobalSetupFor
 		}
 	}
 
-	public readonly properties: GlobalSetupSettings
+	public readonly properties: GlobalSetupLoginSettings
 
 	private readonly globalSetupTTLFile = {
 		path: './browser-states/ttl/',
@@ -65,16 +61,16 @@ export class SiteGlobalSetup {
 			return true
 		})
 
-		if (isFileJustCreated || this.properties.globalSetupTtl === 0) return true
+		if (isFileJustCreated || !this.properties.cacheGlobalSetupFor?.minutes) return true
 
 		const fileContent = await readFile(ttlFilePath + ttlFileName, { encoding: 'utf8' })
 		const fileParsed = JSON.parse(fileContent)
-		const { experienceName, siteName } = this.properties
+		const { storageStateFile } = this.properties
 
-		if (fileParsed[experienceName + siteName]?.[this.env]?.lastExecutedAt) {
-			const { lastExecutedAt } = fileParsed[experienceName + siteName][this.env]
+		if (fileParsed[storageStateFile]?.[this.env]?.lastExecutedAt) {
+			const { lastExecutedAt } = fileParsed[storageStateFile][this.env]
 			const currentTime = new Date().getTime()
-			if (currentTime - lastExecutedAt > this.properties.globalSetupTtl * 60 * 1000) return true
+			if (currentTime - lastExecutedAt > this.properties.cacheGlobalSetupFor.minutes * 60 * 1000) return true
 		} else return true
 		return false
 	}
@@ -85,40 +81,29 @@ export class SiteGlobalSetup {
 			const fileContent = await readFile(ttlFilePath + ttlFileName, { encoding: 'utf8' })
 			const fileParsed = JSON.parse(fileContent)
 			const currentTime = new Date().getTime()
-			const { experienceName, siteName } = this.properties
+			const { storageStateFile } = this.properties
 
-			if (fileParsed[experienceName + siteName]) {
-				if (fileParsed[experienceName + siteName][this.env])
-					fileParsed[experienceName + siteName][this.env].lastExecutedAt = currentTime
-				else fileParsed[experienceName + siteName][this.env] = { lastExecutedAt: currentTime }
-			} else fileParsed[experienceName + siteName] = { [this.env]: { lastExecutedAt: currentTime } }
+			if (fileParsed[storageStateFile]) {
+				if (fileParsed[storageStateFile][this.env]) fileParsed[storageStateFile][this.env].lastExecutedAt = currentTime
+				else fileParsed[storageStateFile][this.env] = { lastExecutedAt: currentTime }
+			} else fileParsed[storageStateFile] = { [this.env]: { lastExecutedAt: currentTime } }
 
 			await writeFile(ttlFilePath + ttlFileName, JSON.stringify(fileParsed))
 			releaseFile()
 		})
 	}
 
-	public async performSetupSteps(): Promise<void> {
-		const {
-			experienceName,
-			siteName,
-			user,
-			signInSteps,
-			signInAssertion,
-			storageStateFile,
-			browserName,
-			globalSetupTtl
-		} = this.properties
+	public async performGlobalSetupSteps(): Promise<void> {
+		const { setupName, user, actionSteps, assertionSteps, storageStateFile, browserName } = this.properties
 
 		const STATUS_MSG = {
-			starting: () => `   # Saving ${experienceName} > ${siteName} storage state...`,
-			retrying: () => `   Retrying ${currentRetry} of ${SETUP_RETRIES}...`,
-			error: () => `   Error on ${experienceName} > ${siteName} storage state flow`,
-			success: () => `   ${colors.green('✓')} ${experienceName} > ${siteName} storage state saved successfully`,
-			cached: () =>
-				`   INFO: Using cached global setup state for ${experienceName} > ${siteName}. TTL: ${globalSetupTtl} minutes`,
+			starting: () => `   # Saving ${setupName} setup state...`,
+			retrying: () => `   Retrying ${currentRetry} of ${RETRIES}...`,
+			error: () => `   Error on ${setupName} setup flow`,
+			success: () => `   ${colors.green('✓')} ${setupName} setup state saved successfully`,
+			cached: () => `   INFO: Using cached global setup state for ${setupName}`,
 			skipped: () =>
-				`   WARN: Global setup '${siteName}' SKIPPED due to condition: skipOnJenkins === true OR forceHeadlessTo === false`
+				`   WARN: Global setup '${setupName}' SKIPPED due to condition: skipOnJenkins === true OR forceHeadlessTo === false`
 		}
 
 		if (process.env.CI && (this.properties.skipOnJenkins || this.properties.forceHeadlessTo === false)) {
@@ -131,14 +116,14 @@ export class SiteGlobalSetup {
 			return
 		}
 
-		const HEADLESS =
-			this.properties.forceHeadlessTo !== undefined
-				? this.properties.forceHeadlessTo
-				: !!process.env.npm_config_headless || process.env.npm_config_headless === undefined
-		const SETUP_RETRIES = !HEADLESS || process.env.npm_config_debug ? 0 : 2
+		const RETRIES = process.env.npm_config_debug ? 0 : 1
 		const launchOptions = {
-			headless: HEADLESS
+			headless:
+				this.properties.forceHeadlessTo !== undefined
+					? this.properties.forceHeadlessTo
+					: !!process.env.npm_config_headless || !!process.env.IS_DOCKER
 		}
+
 		let currentRetry = 0
 		let context: BrowserContext
 
@@ -153,11 +138,11 @@ export class SiteGlobalSetup {
 			const page = context.pages()[0]
 			user.can(BrowseTheWeb.with(page))
 			// Sign-in steps
-			await user.attemptsTo(signInSteps)
+			await user.attemptsTo(actionSteps)
 			// Assert sign-in state
-			if (signInAssertion) await user.asks(signInAssertion)
+			if (assertionSteps) await user.asks(assertionSteps)
 			// Save storage state
-			await page.context().storageState({ path: storageStateFile })
+			if (storageStateFile) await page.context().storageState({ path: storageStateFile })
 			await this.saveCurrentTtl()
 		}
 
@@ -168,7 +153,7 @@ export class SiteGlobalSetup {
 				await runSteps()
 				break
 			} catch (err) {
-				if (currentRetry >= SETUP_RETRIES) {
+				if (currentRetry >= RETRIES) {
 					console.log()
 					console.log(colors.red(STATUS_MSG.error()))
 					console.log()
@@ -180,9 +165,9 @@ export class SiteGlobalSetup {
 				console.log(colors.yellow(STATUS_MSG.retrying()))
 				console.log()
 			} finally {
-				await context.close()
+				await context?.close()
 			}
-		} while (currentRetry <= SETUP_RETRIES)
+		} while (currentRetry <= RETRIES)
 
 		console.log(STATUS_MSG.success())
 	}

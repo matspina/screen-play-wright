@@ -1,6 +1,6 @@
+import { Interaction } from '@interaction'
 import { Dialog } from '@playwright/test'
 
-import { Activity } from '@activity'
 import { User } from '@actors/user'
 
 /**
@@ -9,7 +9,7 @@ import { User } from '@actors/user'
  * @method `.blocker()` Static initializer. Blocks the page redirect if a navigation is about to happen.
  * @method `.unblocker()` Static initializer. Unblocks the page redirect in the case it was blocked previously.
  */
-export class AddPageRedirect implements Activity<void> {
+export class AddPageRedirect implements Interaction<void> {
 	private action: string
 
 	constructor(action: string) {

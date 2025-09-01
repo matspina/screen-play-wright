@@ -1,4 +1,5 @@
-import { Activity } from '@activity'
+import { Interaction } from '@interaction'
+
 import { User } from '@actors/user'
 
 /**
@@ -6,7 +7,7 @@ import { User } from '@actors/user'
  * E.g.: KeyboardDown.theFollowingKey('Tab')
  * @method `.theFollowingKey()` Static initializer. Receives the key to be pressed.
  */
-export class KeyboardDown implements Activity<void> {
+export class KeyboardDown implements Interaction<void> {
 	private key: string
 
 	constructor(key: string) {

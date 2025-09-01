@@ -1,9 +1,8 @@
 import { expect } from '@playwright/test'
+import { Question } from '@question'
 
 import { User } from '@actors/user'
 import retryExpect from '@utils/retry-expect'
-
-import { Question } from '@questions/question'
 
 /**
  * Text assertions methods.

@@ -1,58 +1,56 @@
-import 'tsconfig-paths/register'
+import { test as setup } from '@playwright/test'
 import colors from 'colors'
+import { readFile } from 'fs/promises'
 
-import { getPromiseState } from '@utils/get-promise-state'
+import { GenericIdentityFn, GlobalSetupAndTeardownOptions } from '../@types/general.js'
+import { getPromiseState } from '../utils/get-promise-state.js'
+import { dynamicallyImportSetupFiles } from './dynamically-import-files.js'
+import { getEnvAndInstance, getNumberOfWorkers } from './environment-manager.js'
+import { globalSetupSitesFile } from './project-running-filter.js'
+import { SiteGlobalSetup } from './sites-global-setup.js'
 
-import playwrightTestConfig from '../config/playwright.config'
-import { dynamicallyImportSetupFiles, dynamicallyImportEnvMap } from './dynamically-import-files'
-import { getEnvAndInstance, getSessionEnvironmentData } from './environment-manager'
-import { SiteGlobalSetup } from './sites-global-setup'
+const { env, instance } = getEnvAndInstance()
 
-export default async (): Promise<void> => {
-	console.log(colors.cyan('\nRunning Global Setup'))
+export class GlobalSetup {
+	public static async run(customFn: GenericIdentityFn, { enableLogs }: GlobalSetupAndTeardownOptions) {
+		setup('Global Setup', async ({}) => {
+			logger(colors.cyan('\nRunning Global Setup'))
+			logger(`\n   Tests will run against ${colors.yellow(`${env.toUpperCase()}${instance}`)} environment`)
 
-	informExperiencesRunning()
-	await saveLoginStates()
+			if (customFn) await customFn()
+			await saveGlobalSetupStates()
 
-	console.log(colors.cyan('\nGlobal Setup finished successfully'))
-	console.log('\nRunning tests\n')
-}
+			logger(colors.cyan('\nGlobal Setup finished successfully'))
+			logger('\nRunning tests\n')
+		})
 
-const informExperiencesRunning = (): void => {
-	const environmentsMaps = dynamicallyImportEnvMap()
-	const { env } = getEnvAndInstance()
-
-	console.log(`\n   Tests will run against ${colors.yellow(env.toUpperCase())} environment, for:`)
-
-	for (const environmentsMap of environmentsMaps) {
-		const { experienceName, baseEnvironmentData } = environmentsMap.default
-		if (process.env[`PW_PROJECT_RUNNING_${experienceName}`]) {
-			const { experienceInstance } = getSessionEnvironmentData(baseEnvironmentData)
-			console.log(`      - ${experienceName} instance: ${colors.yellow(experienceInstance)}`)
+		const logger = (message: string) => {
+			if (enableLogs) console.log(message)
 		}
 	}
 }
 
-const saveLoginStates = async (): Promise<void> => {
+const saveGlobalSetupStates = async (): Promise<void> => {
 	if (process.env.npm_config_skip_state === 'true') return
 
-	const MAX_PARALLEL_SETUPS = playwrightTestConfig.workers as number
+	const MAX_PARALLEL_SETUPS = getNumberOfWorkers()
 	const sitesToSaveLoginStates: Array<SiteGlobalSetup> = []
-	const sitesSetup = dynamicallyImportSetupFiles()
-	const { env } = getEnvAndInstance()
+	const sitesWithGlobalSetup = JSON.parse(
+		await readFile(globalSetupSitesFile.path + globalSetupSitesFile.name, { encoding: 'utf-8' })
+	)
+	const sitesSetup = await dynamicallyImportSetupFiles()
 
 	for (const siteSetup of sitesSetup) {
-		const { experienceName, siteName } = siteSetup.default.properties
-		if (process.env[`PW_SITE_HAS_GLOBAL_SETUP_${experienceName}_${siteName}`]) {
+		const { storageStateFile } = siteSetup.default.properties
+		if (sitesWithGlobalSetup.some(e => e === `PW_SITE_HAS_GLOBAL_SETUP:${storageStateFile}`))
 			sitesToSaveLoginStates.push(siteSetup.default)
-		}
 	}
 
 	const firstBatchToRun = sitesToSaveLoginStates.splice(0, MAX_PARALLEL_SETUPS)
 	const promisesToWait: Array<Promise<void>> = []
 	let isAnySetupFulfilled: boolean
 
-	for (const siteLoginSteps of firstBatchToRun) promisesToWait.push(siteLoginSteps.performSetupSteps())
+	for (const siteLoginSteps of firstBatchToRun) promisesToWait.push(siteLoginSteps.performGlobalSetupSteps())
 
 	while (promisesToWait.length > 0) {
 		await Promise.race(promisesToWait)
@@ -81,7 +79,8 @@ const saveLoginStates = async (): Promise<void> => {
 						if (promiseState === 'fulfilled') isAnySetupFulfilled = true
 					}
 				}
-				if (sitesToSaveLoginStates.length > 0) promisesToWait.push(sitesToSaveLoginStates.shift().performSetupSteps())
+				if (sitesToSaveLoginStates.length > 0)
+					promisesToWait.push(sitesToSaveLoginStates.shift().performGlobalSetupSteps())
 				if (promisesToWait.length === 0 && !isAnySetupFulfilled)
 					throw Error('No global setup successed. Please check above for details.')
 			})

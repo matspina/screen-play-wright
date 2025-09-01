@@ -1,18 +1,20 @@
+/* eslint-disable complexity */
+
 import colors from 'colors'
 import { existsSync } from 'fs'
 import { readFile, writeFile } from 'fs/promises'
 import inquirer from 'inquirer'
 
-import { VALID_ENVIRONMENTS, RUNNING_ARGS_FILE } from './environment-manager'
+import { VALID_ENVIRONMENTS, RUNNING_ARGS_FILE, RunningArgs } from './environment-manager.js'
 
 const main = async (): Promise<void> => {
-	let runningArgs = {
+	let runningArgs: RunningArgs = {
 		envAndInstance: '',
 		additionalArgs: false,
-		profile: '',
-		updateSnapshots: false,
-		retries: 0,
-		workers: 1
+		profile: process.env.npm_config_profile?.toLowerCase() || '',
+		updateSnapshots: !!process.env.npm_config_update_snapshots,
+		retries: Number(process.env.npm_config_retries) || 0,
+		workers: Number(process.env.npm_config_workers) || 1
 	}
 	let shouldPromptUser: boolean
 
@@ -43,8 +45,7 @@ const main = async (): Promise<void> => {
 					}
 					return true
 				},
-				message: 'Enter the environment',
-				suffix: ' (type "help" for instructions):',
+				message: 'Enter the environment (type "help" for instructions):',
 				default: runningArgs.envAndInstance
 			})
 		).envAndInstance
@@ -87,8 +88,7 @@ const main = async (): Promise<void> => {
 				await inquirer.prompt({
 					name: 'profile',
 					type: 'list',
-					prefix: '  > ',
-					message: 'Profile:',
+					message: '  >  Profile:',
 					choices: ['Both', 'Desktop', 'Mobile'],
 					default: runningArgs.profile
 				})
@@ -98,8 +98,7 @@ const main = async (): Promise<void> => {
 				await inquirer.prompt({
 					name: 'updateSnapshots',
 					type: 'confirm',
-					prefix: '  > ',
-					message: 'Update snapshots?',
+					message: '  >  Update snapshots?',
 					default: runningArgs.updateSnapshots
 				})
 			).updateSnapshots
@@ -108,8 +107,7 @@ const main = async (): Promise<void> => {
 				await inquirer.prompt({
 					name: 'retries',
 					type: 'number',
-					prefix: '  > ',
-					message: 'Number of retries:',
+					message: '  >  Number of retries:',
 					default: runningArgs.retries || 0
 				})
 			).retries
@@ -118,8 +116,7 @@ const main = async (): Promise<void> => {
 				await inquirer.prompt({
 					name: 'workers',
 					type: 'number',
-					prefix: '  > ',
-					message: 'Number of workers:',
+					message: '  >  Number of workers:',
 					default: runningArgs.workers || 1
 				})
 			).workers

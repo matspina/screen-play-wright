@@ -1,7 +1,8 @@
 /* eslint-disable no-param-reassign */
 
+import { Interaction } from '@interaction'
+
 import { PageWithGUID } from '@abilities/browse-the-web'
-import { Activity } from '@activity'
 import { User } from '@actors/user'
 
 /**
@@ -9,7 +10,7 @@ import { User } from '@actors/user'
  * E.g.: OpenNew.tab()
  * @method `.tab()` Static initializer. Opens a new page/tab.
  */
-export class OpenNew implements Activity<void> {
+export class OpenNew implements Interaction<void> {
 	public static tab(): OpenNew {
 		return new OpenNew()
 	}

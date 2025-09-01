@@ -1,35 +1,27 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "commonjs",
-    "lib": ["es6", "dom"],
-    "allowJs": true,
-    "rootDirs": ["./src", "./tests"],
-    "baseUrl": "./src",
-    "moduleResolution": "Node",
-    "sourceMap": true,
-    "removeComments": true,
-    "typeRoots": ["./node_modules/@types", "./src/@types"],
+    "module": "ESNext",
+    "lib": ["ESNext", "DOM"],
+    "moduleResolution": "Bundler",
     "esModuleInterop": true,
+    "baseUrl": "./",
+    "typeRoots": ["./node_modules/@types"],
     "resolveJsonModule": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "@abilities/*": ["screenplay/abilities/*"],
-      "@actors/*": ["screenplay/actors/*"],
-      "@activity": ["screenplay/activity.ts"],
-      "@config/*": ["config/*"],
-      "@interactions/*": ["screenplay/interactions/*"],
-      "@mocks/*": ["mocks/*"],
-      "@page-objects/*": ["page-objects/*"],
-      "@questions/*": ["screenplay/questions/*"],
-      "@site-content/*": ["site-content/*"],
-      "@tasks/*": ["screenplay/tasks/*"],
-      "@utils/*": ["utils/*"]
+      "@abilities/*": ["./src/screenplay/abilities/*"],
+      "@config/*": ["./src/config/*"],
+      "@interaction": ["./src/@types/interaction.ts"],
+      "@interactions/*": ["./src/screenplay/interactions/*"],
+      "@mocks/*": ["./src/mocks/*"],
+      "@page-objects/*": ["./src/page-objects/*"],
+      "@question": ["./src/@types/question.ts"],
+      "@questions/*": ["./src/screenplay/questions/*"],
+      "@tasks/*": ["./src/screenplay/tasks/*"],
+      "@actors/*": ["./src/screenplay/actors/*"],
+      "@utils/*": ["./src/utils/*"]
     }
-  },
-  "include": ["src/**/*.ts", "tests/**/*.ts"],
-  "exclude": ["node_modules"]
+  }
 }

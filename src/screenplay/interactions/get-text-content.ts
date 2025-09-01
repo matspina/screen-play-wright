@@ -1,4 +1,5 @@
-import { Activity } from '@activity'
+import { Interaction } from '@interaction'
+
 import { User } from '@actors/user'
 
 /**
@@ -7,7 +8,7 @@ import { User } from '@actors/user'
  * @method `.from()` Static initializer. A selector to search for an element.
  * If there are multiple elements satisfying the selector, the first will be used.
  */
-export class GetTextContent implements Activity<string> {
+export class GetTextContent implements Interaction<string> {
 	private selector: string
 
 	private frameLocator: string

@@ -1,7 +1,7 @@
+import { Interaction } from '@interaction'
 import { FingerprintGenerator } from 'fingerprint-generator'
 import { FingerprintInjector } from 'fingerprint-injector'
 
-import { Activity } from '@activity'
 import { User } from '@actors/user'
 
 /**
@@ -9,7 +9,7 @@ import { User } from '@actors/user'
  * E.g.: UseRandomFingerprint.onBrowser()
  * @method `.onBrowser()` Static initializer. Injects a random browser fingerprint.
  */
-export class UseRandomFingerprint implements Activity<void> {
+export class UseRandomFingerprint implements Interaction<void> {
 	public static onBrowser(): UseRandomFingerprint {
 		return new UseRandomFingerprint()
 	}

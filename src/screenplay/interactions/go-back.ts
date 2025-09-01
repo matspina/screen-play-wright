@@ -1,4 +1,5 @@
-import { Activity } from '@activity'
+import { Interaction } from '@interaction'
+
 import { User } from '@actors/user'
 
 type WaitUntil = 'load' | 'domcontentloaded' | 'networkidle' | 'commit'
@@ -9,7 +10,7 @@ type WaitUntil = 'load' | 'domcontentloaded' | 'networkidle' | 'commit'
  * @method `.back()` Static initializer. Performs the go back action.
  * @method `.andWaitUntil()` [OPTIONAL] Defines when load should be considered completed.
  */
-export class Go implements Activity<void> {
+export class Go implements Interaction<void> {
 	private state: WaitUntil
 
 	public static back(): Go {

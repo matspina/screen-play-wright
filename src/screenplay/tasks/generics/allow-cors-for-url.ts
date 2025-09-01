@@ -1,4 +1,5 @@
-import { Activity } from '@activity'
+import { Interaction } from '@interaction'
+
 import { User } from '@actors/user'
 
 /**
@@ -6,7 +7,7 @@ import { User } from '@actors/user'
  * Should be used before the page load.
  * E.g.: AllowCorsFor.url('**\/store/graphql*')
  */
-export class AllowCorsFor implements Activity<void> {
+export class AllowCorsFor implements Interaction<void> {
 	private url: string | RegExp
 
 	constructor(url: string | RegExp) {

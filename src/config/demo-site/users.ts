@@ -1,5 +1,3 @@
-import 'tsconfig-paths/register'
-
 import { User } from '@actors/user'
 
 export class RetrieveUserData {

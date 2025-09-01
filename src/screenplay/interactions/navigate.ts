@@ -1,6 +1,6 @@
+import { Interaction } from '@interaction'
 import { Response } from '@playwright/test'
 
-import { Activity } from '@activity'
 import { User } from '@actors/user'
 import { removeHttpCredential } from '@utils/remove-http-credential'
 
@@ -13,7 +13,7 @@ type WaitUntil = 'domcontentloaded' | 'networkidle' | 'load' | 'commit'
  * @method `.andWaitUntil()` [optional] Specifies how the navigation will wait to complete the step.
  * Available options: 'domcontentloaded' | 'networkidle' | 'load' | 'commit'. Defaults to 'load'.
  */
-export class Navigate implements Activity<Response> {
+export class Navigate implements Interaction<Response> {
 	public url: URL
 
 	public waitUntil: WaitUntil = 'load'

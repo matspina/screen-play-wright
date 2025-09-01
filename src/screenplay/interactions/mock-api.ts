@@ -1,4 +1,5 @@
-import { Activity } from '@activity'
+import { Interaction } from '@interaction'
+
 import { User } from '@actors/user'
 
 type Data = {
@@ -15,7 +16,7 @@ type Data = {
  * The DATA should be an object containing the following attributes: status<number>, body<object> and headers<object>.
  * For mock data examples, check files under the folder ./src/mocks
  */
-export class Mock implements Activity<void> {
+export class Mock implements Interaction<void> {
 	private endpoint: string | RegExp
 
 	private status: number

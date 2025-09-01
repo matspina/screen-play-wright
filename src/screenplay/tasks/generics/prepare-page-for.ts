@@ -1,4 +1,5 @@
-import { Activity } from '@activity'
+import { Interaction } from '@interaction'
+
 import { User } from '@actors/user'
 
 import { Scroll } from '@interactions/scroll-to'
@@ -13,7 +14,7 @@ type NumberBetween1To4 = 1 | 2 | 3 | 4
  * @method `.fullScreenshot()` Static initializer. Performs 1 round of scrolling.
  * @method `.withScrollingRoundsOf()` Sets a custom number for scrolling rounds. Valid values: 1 to 4.
  */
-export class PreparePageFor implements Activity<void> {
+export class PreparePageFor implements Interaction<void> {
 	private scrolls: NumberBetween1To4 = 1
 
 	public static fullScreenshot(): PreparePageFor {

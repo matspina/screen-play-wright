@@ -1,9 +1,9 @@
 /* eslint-disable no-param-reassign */
+import { Interaction } from '@interaction'
 import { Page } from '@playwright/test'
 import colors from 'colors'
 
 import { PageWithGUID } from '@abilities/browse-the-web'
-import { Activity } from '@activity'
 import { User } from '@actors/user'
 import playwrightTestConfig from '@config/playwright.config'
 
@@ -12,7 +12,7 @@ import playwrightTestConfig from '@config/playwright.config'
  * E.g.: SwitchToTab.number(2)
  * @method `.number()` Static initializer. Receives the tab number to switch and focus. Note: Tab number starts on 1.
  */
-export class SwitchToTab implements Activity<void> {
+export class SwitchToTab implements Interaction<void> {
 	private number: number
 
 	constructor(number: number) {

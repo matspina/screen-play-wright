@@ -1,4 +1,5 @@
-import { Activity } from '@activity'
+import { Interaction } from '@interaction'
+
 import { User } from '@actors/user'
 
 /**
@@ -9,7 +10,7 @@ import { User } from '@actors/user'
  * @method `.theLabel()` Matches an item by the dropdown element's label attribute. If none, element's text is matched.
  * @method `.theIndex()` Matches an item by the dropdown index.
  */
-export class Select implements Activity<string[]> {
+export class Select implements Interaction<string[]> {
 	private selector: string
 
 	private value: string

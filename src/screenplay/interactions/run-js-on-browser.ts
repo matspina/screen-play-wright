@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/ban-types */
-import { Activity } from '@activity'
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
+import { Interaction } from '@interaction'
+
 import { User } from '@actors/user'
 
 /**
@@ -8,7 +9,7 @@ import { User } from '@actors/user'
  * @method `.onBrowser()` Static initializer. Receives the function to be run in the browser context.
  * It can be either a string or a JS function.
  */
-export class RunJs implements Activity<unknown> {
+export class RunJs implements Interaction<unknown> {
 	private jsFunction
 
 	constructor(jsFunction: Function | string) {

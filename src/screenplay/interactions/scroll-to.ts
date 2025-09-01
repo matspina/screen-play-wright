@@ -1,4 +1,5 @@
-import { Activity } from '@activity'
+import { Interaction } from '@interaction'
+
 import { User } from '@actors/user'
 
 /**
@@ -7,7 +8,7 @@ import { User } from '@actors/user'
  * E.g.: Scroll.to('div.footer')
  * @method `.to()` Static initializer. Receives the position or locator selector for scrolling.
  */
-export class Scroll implements Activity<void> {
+export class Scroll implements Interaction<void> {
 	private position: number
 
 	private locator: string

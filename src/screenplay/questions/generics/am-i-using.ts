@@ -1,8 +1,7 @@
 import { expect } from '@playwright/test'
+import { Question } from '@question'
 
 import { User } from '@actors/user'
-
-import { Question } from '@questions/question'
 
 type DeviceType = 'mobile' | 'desktop'
 

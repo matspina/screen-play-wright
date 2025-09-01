@@ -1,4 +1,5 @@
-import { Activity } from '@activity'
+import { Interaction } from '@interaction'
+
 import { User } from '@actors/user'
 
 /**
@@ -8,7 +9,7 @@ import { User } from '@actors/user'
  * @method `.from()` Static initializer. Receives a selector to start swipping.
  * @method `.to()` Receives a selector to end the swipping.
  */
-export class Swipe implements Activity<void> {
+export class Swipe implements Interaction<void> {
 	private fromSelector: string
 
 	private toSelector: string

@@ -1,4 +1,5 @@
-import { Activity } from '@activity'
+import { Interaction } from '@interaction'
+
 import { User } from '@actors/user'
 
 /**
@@ -6,7 +7,7 @@ import { User } from '@actors/user'
  * E.g.: ClearBrowser.data()
  * @method `.data()` Static initializer. Clears all browser data.
  */
-export class ClearBrowser implements Activity<void> {
+export class ClearBrowser implements Interaction<void> {
 	public static data(): ClearBrowser {
 		return new ClearBrowser()
 	}

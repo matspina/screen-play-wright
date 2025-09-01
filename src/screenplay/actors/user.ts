@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Mailjs from '@cemalgnlts/mailjs'
 
-import { BrowseTheWeb } from '@abilities/browse-the-web'
-import { Activity } from '@activity'
-
-import { Question } from '@questions/question'
+import { Interaction } from '../../@types/interaction.js'
+import { Question } from '../../@types/question.js'
+import { BrowseTheWeb } from '../abilities/browse-the-web.js'
 
 type Abilities = {
 	browseTheWeb: BrowseTheWeb
@@ -27,15 +26,16 @@ export class User {
 
 	public readonly customProperties: Record<any, any> = {}
 
-	constructor(firstName: string) {
+	constructor(firstName: string, lastName?: string) {
 		this.firstName = firstName
+		this.lastName = lastName
 		this.abilities = {
 			browseTheWeb: undefined
 		}
 	}
 
-	public static named(firstName: string): User {
-		return new User(firstName)
+	public static named(firstName: string, lastName?: string): User {
+		return new User(firstName, lastName)
 	}
 
 	public withUsername(username: string): User {
@@ -68,7 +68,10 @@ export class User {
 		})
 
 		this.mailjs = mailjs
-		this.username = newMailAccount.data.username
+		this.customProperties.mailjsUsername = newMailAccount.data.username
+		this.customProperties.mailjsPassword = newMailAccount.data.password
+		if (!this.username) this.username = this.customProperties.mailjsUsername
+		if (!this.password) this.password = this.customProperties.mailjsPassword
 		return this
 	}
 
@@ -76,7 +79,7 @@ export class User {
 		this.abilities.browseTheWeb = ability
 	}
 
-	public async attemptsTo<T>(activity: Activity<T>): Promise<T> {
+	public async attemptsTo<T>(activity: Interaction<T>): Promise<T> {
 		return activity.performAs(this)
 	}
 

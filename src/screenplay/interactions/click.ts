@@ -1,4 +1,5 @@
-import { Activity } from '@activity'
+import { Interaction } from '@interaction'
+
 import { User } from '@actors/user'
 
 type MouseButton = 'middle' | 'left' | 'right'
@@ -12,7 +13,7 @@ type MouseButton = 'middle' | 'left' | 'right'
  * If you don't want to wait, use this method.
  * @method `.andAttachFile()` [optional] Attach a file when a file chooser appears after a click.
  */
-export class Click implements Activity<void> {
+export class Click implements Interaction<void> {
 	private selector: string
 
 	private button: MouseButton = 'left'

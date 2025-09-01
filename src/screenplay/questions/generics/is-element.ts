@@ -1,10 +1,10 @@
 import { expect } from '@playwright/test'
+import { Question } from '@question'
 
 import { User } from '@actors/user'
 import playwrightTestConfig from '@config/playwright.config'
 
 import { WaitFor } from '@interactions/wait-for'
-import { Question } from '@questions/question'
 
 /**
  * Asserts element visibility and/or its attributes.

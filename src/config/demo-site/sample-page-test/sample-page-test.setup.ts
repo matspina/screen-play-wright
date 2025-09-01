@@ -1,6 +1,4 @@
-import 'tsconfig-paths/register'
-
-import { Activity } from '@activity'
+import { Interaction } from '@interaction'
 
 import { SamplePageTest } from '@page-objects/demo-site/sample-page-test'
 
@@ -9,7 +7,7 @@ import { Navigate } from '@interactions/navigate'
 import { SiteGlobalSetup } from '../../../core/sites-global-setup'
 import { RetrieveUserData } from '../users'
 
-class NavigateAndSignIn implements Activity<void> {
+class NavigateAndSignIn implements Interaction<void> {
 	public static onCurrentPage = (): NavigateAndSignIn => new NavigateAndSignIn()
 
 	public async performAs(): Promise<void> {
@@ -23,10 +21,9 @@ class NavigateAndSignIn implements Activity<void> {
 export const user = RetrieveUserData.generic()
 export default new SiteGlobalSetup({
 	user,
-	experienceName: 'DEMO SITE',
-	siteName: 'Sample Page Test',
+	setupName: 'DEMO SITE: Sample Page Test',
 	testsPath: '/tests/demo-site/sample-page-test/',
 	storageStateFile: './browser-states/demo-sample-page-cached-state.json',
-	signInSteps: NavigateAndSignIn.onCurrentPage(),
-	globalSetupTtl: 20
+	actionSteps: NavigateAndSignIn.onCurrentPage(),
+	cacheGlobalSetupFor: { minutes: 5 }
 })

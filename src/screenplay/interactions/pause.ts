@@ -1,4 +1,5 @@
-import { Activity } from '@activity'
+import { Interaction } from '@interaction'
+
 import { User } from '@actors/user'
 
 /**
@@ -6,7 +7,7 @@ import { User } from '@actors/user'
  * E.g.: Pause.execution()
  * @method `.execution()` Static initializer. Pauses the execution.
  */
-export class Pause implements Activity<void> {
+export class Pause implements Interaction<void> {
 	public static execution(): Pause {
 		return new Pause()
 	}

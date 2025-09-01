@@ -1,4 +1,3 @@
-import 'tsconfig-paths/register'
 import { test } from '@playwright/test'
 
 import { BrowseTheWeb } from '@abilities/browse-the-web'

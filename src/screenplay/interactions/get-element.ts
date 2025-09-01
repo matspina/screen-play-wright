@@ -1,6 +1,6 @@
+import { Interaction } from '@interaction'
 import { Locator } from '@playwright/test'
 
-import { Activity } from '@activity'
 import { User } from '@actors/user'
 
 /**
@@ -8,7 +8,7 @@ import { User } from '@actors/user'
  * E.g.: GetElement.withSelector('div.selector')
  * @method `.withSelector()` Static initializer. A selector to use when resolving DOM element.
  */
-export class GetElement implements Activity<Locator> {
+export class GetElement implements Interaction<Locator> {
 	private selector: string
 
 	private frameLocator: string

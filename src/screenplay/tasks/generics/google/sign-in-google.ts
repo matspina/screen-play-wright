@@ -1,4 +1,5 @@
-import { Activity } from '@activity'
+import { Interaction } from '@interaction'
+
 import { User } from '@actors/user'
 
 import { AvailableGoogleAccountNames, GoogleSignIn } from '@page-objects/generics/google/sign-in-page'
@@ -11,7 +12,7 @@ import { IsElement } from '@questions/generics/is-element'
 import { IsPageUrl } from '@questions/generics/is-page-url-matching'
 import { IsText } from '@questions/generics/is-text-matching'
 
-export class SignInAt implements Activity<void> {
+export class SignInAt implements Interaction<void> {
 	private accountToUse: AvailableGoogleAccountNames
 
 	public static googleAccount(accountToUse: AvailableGoogleAccountNames): SignInAt {

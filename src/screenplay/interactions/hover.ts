@@ -1,4 +1,5 @@
-import { Activity } from '@activity'
+import { Interaction } from '@interaction'
+
 import { User } from '@actors/user'
 
 /**
@@ -6,7 +7,7 @@ import { User } from '@actors/user'
  * E.g.: Hover.on('div.selector')
  * @method `.on()` Static initializer. Receives a selector for hovering.
  */
-export class Hover implements Activity<void> {
+export class Hover implements Interaction<void> {
 	private selector: string
 
 	private frameLocator: string

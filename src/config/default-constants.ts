@@ -1,0 +1,5 @@
+export const TIMEOUTS = {
+	NAVIGATION: 30000,
+	ACTION: 15000,
+	EXPECT: 5000
+}

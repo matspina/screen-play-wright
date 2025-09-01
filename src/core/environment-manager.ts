@@ -1,7 +1,16 @@
 import { readFileSync } from 'fs'
 
 export const VALID_ENVIRONMENTS = ['dev', 'qa', 'uat', 'prod'] as const
-export const RUNNING_ARGS_FILE = 'src/utils/runningArgs.json'
+export const RUNNING_ARGS_FILE = 'src/utils/runningArgs.temp.json'
+
+export type RunningArgs = {
+	envAndInstance?: string
+	additionalArgs?: boolean
+	profile?: string
+	updateSnapshots?: boolean
+	retries?: number
+	workers?: number
+}
 
 export type BaseEnvironmentData = {
 	[env in (typeof VALID_ENVIRONMENTS)[number]]?: {
@@ -15,10 +24,12 @@ export type BaseEnvironmentData = {
 	}
 }
 
-export type EnvironmentsMap = {
-	experienceName: string
-	experiencePath: string
-	baseEnvironmentData: BaseEnvironmentData
+const getSessionEnvironmentData = (baseEnvironmentData: BaseEnvironmentData): Record<string, string> => {
+	const { env, instance } = getEnvAndInstance()
+	if (!baseEnvironmentData[env]) return { env: 'NONE', currentInstance: 'NONE' }
+	const currentInstance = baseEnvironmentData[env][instance] ? instance : '1'
+	const sites = baseEnvironmentData[env][currentInstance] || {}
+	return { env, currentInstance, sites }
 }
 
 export const sessionSitesListBuilder = (baseEnvironmentData: BaseEnvironmentData): Record<string, string> => {
@@ -40,19 +51,16 @@ export const sessionSitesListBuilder = (baseEnvironmentData: BaseEnvironmentData
 	return sites
 }
 
-export const getSessionEnvironmentData = (baseEnvironmentData: BaseEnvironmentData): Record<string, string> => {
-	const { env, instance } = getEnvAndInstance()
-	if (!baseEnvironmentData[env]) return { env: 'NONE', experienceInstance: 'NONE' }
-	const { commonUsernameSecretKey, commonPasswordSecretKey } = baseEnvironmentData[env]
-	const experienceInstance = baseEnvironmentData[env][instance] ? instance : '1'
-	const sites = baseEnvironmentData[env][experienceInstance] || {}
-	return { env, experienceInstance, sites, commonUsernameSecretKey, commonPasswordSecretKey }
-}
-
 export const getEnvAndInstance = (): Record<string, string> => {
 	if (!process.env.npm_config_env && !process.env.CI)
 		process.env.npm_config_env = JSON.parse(readFileSync(RUNNING_ARGS_FILE, { encoding: 'utf-8' })).envAndInstance
 	const instanceSplitter = /(?<=\D)(?=\d)/
 	const [env, instance] = process.env.npm_config_env.split(instanceSplitter)
 	return { env: env.toLowerCase(), instance: instance || '' }
+}
+
+export const getNumberOfWorkers = (): number => {
+	if (!process.env.npm_config_workers && !process.env.CI)
+		process.env.npm_config_workers = JSON.parse(readFileSync(RUNNING_ARGS_FILE, { encoding: 'utf-8' })).workers
+	return Number(process.env.npm_config_workers) || 1
 }
