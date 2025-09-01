@@ -48,7 +48,7 @@ test.describe('Sample page user tests', async () => {
 			)
 		})
 
-		test('Visual regression of the page header', async () => {
+		test('[DESKTOP-ONLY] Visual regression of the page header', async () => {
 			await user.attemptsTo(Navigate.to(SamplePageTest.URL).andWaitUntil('networkidle'))
 			await user.asks(
 				DoesScreenshotMatchSnapshot.of('sample-page-header').fromSelector(
